@@ -29,6 +29,7 @@ class Grafo {
   //Para dibujar el camino se usara un arreglo de lineas
   Linea[] camino;
   Linea[] caminoE;
+  Linea[] caminoB;
 
 
   color colnodo1a=(color(0, 255, 0));
@@ -313,6 +314,58 @@ class Grafo {
       }
     }
   }
+  void createPathStartB (int n){
+    caminoB = new Linea[200];
+    for (int i = 0; i < tnodo; i++){
+      condiciones[i] = 0;
+    }
+    for (int i = 0; i < tnodo; i++){
+      distancias[i] = Double.MAX_VALUE;
+    }
+    padres[n-1] = n-1;
+    condiciones[n-1] = 1;
+    distancias[n-1] = 0;
+    for (int i = 0; i < nodo.length; i++){
+      for (int j = 0; j < nodo.length; j++){
+        if (condiciones[j] == 1){
+          for (int k = 0; k < nodo[j].cantidadConexiones(); k++){
+            int kk = nodo[j].getConexion(k)-1;
+            //System.out.println("Nodo " + (j+1) + " " + nodo[j].cantidadConexiones() + " " + nodo[kk].z);
+            if (condiciones[kk] == 0){
+              
+              if((nodo[kk]==nodo[70])||(nodo[kk]==nodo[93])||(nodo[kk]==nodo[92])||(nodo[kk]==nodo[91])||(nodo[kk]==nodo[90])||(nodo[kk]==nodo[74])||(nodo[kk]==nodo[89])||(nodo[kk]==nodo[88])||(nodo[kk]==nodo[87])||(nodo[kk]==nodo[86])||(nodo[kk]==nodo[84])||(nodo[kk]==nodo[77])||(nodo[kk]==nodo[133])||(nodo[kk]==nodo[128])||(nodo[kk]==nodo[80])||(nodo[kk]==nodo[61])||(nodo[kk]==nodo[149])||(nodo[kk]==nodo[151])||(nodo[kk]==nodo[152])||(nodo[kk]==nodo[148])||(nodo[kk]==nodo[148])||(nodo[kk]==nodo[146])||(nodo[kk]==nodo[147])||(nodo[kk]==nodo[131])||(nodo[kk]==nodo[155])||(nodo[kk]==nodo[22])){
+                
+                 double dist = distancia(nodo[j],nodo[kk])-20 + distancias[j];  
+                
+              }else{
+                double dist = distancia(nodo[j],nodo[kk]) + distancias[j];}
+              if (distancias[kk] > dist){
+                distancias[kk] = dist;
+                padres[kk] = j;
+              }
+            }
+          }
+        }
+      }
+      
+      double min = Double.MAX_VALUE;
+      int jmin = 0;
+      for (int j = 0; j < nodo.length; j++){
+        if (condiciones[j] == 0){
+          if (min > distancias[j]){
+            min = distancias[j];
+            jmin = j;
+          }
+        }
+      }
+      condiciones[jmin] = 1;
+      for (int j = 0; j < nodo.length; j++){
+        if (condiciones[j] == 0){
+          distancias[j] = Double.MAX_VALUE;
+        }
+      }
+    }
+  }
   double distancia (Nodo a, Nodo b) {
     return Math.sqrt(((a.posicion.x-b.posicion.x)*(a.posicion.x-b.posicion.x))+((a.posicion.y-b.posicion.y)*(a.posicion.y-b.posicion.y)));
   }
@@ -340,15 +393,27 @@ void drawShorterPathE (int n, int start){
       index++;
     }
     caminoE[index] = new Linea(nodo[i].posicion,nodo[padres[i]].posicion);
-    for (int k = 0; k < caminoE.length; k++){
+    //for (int k = 0; k < caminoE.length; k++){
       
-      if (caminoE[k] == null){
-        break;
-      }
+      //if (caminoE[k] == null){
+       // break;
+      //}
       
-    }
+    //}
     
    
+  }
+ void drawShorterPathB (int n, int start) {
+    caminoB = new Linea[200];
+    int i = n-1;
+    int index = 0;
+    while (padres[i] != start-1) {
+      caminoB[index] = new Linea(nodo[i].posicion, nodo[padres[i]].posicion);
+      //System.out.println(padres[i]+1);
+      i = padres[i];
+      index++;
+    }
+    caminoB[index] = new Linea(nodo[i].posicion, nodo[padres[i]].posicion);
   }
   void display() {    
     pushStyle();
@@ -389,21 +454,8 @@ void drawShorterPathE (int n, int start){
       }
     }
 
-    pushStyle();
-    strokeWeight(2);
-    stroke(0, 0, 0);
-    strokeWeight(5);
-    fill(0);
-
-    for (int i = 0; i < camino.length; i++) {
-      if (camino[i] == null) {
-        break;
-      }
-      PVector a = camino[i].puntoinicial;
-      PVector b = camino[i].puntofinal;
-      line(a.x, a.y, b.x, b.y);
-    }
-
+   
+     
     
     //for (int i = 0; i < opcion.length; i++) {
     //  opcion[i].display();
@@ -420,7 +472,7 @@ void drawShorterPathE (int n, int start){
     strokeWeight(2);
     stroke(0, 0, 0);
     strokeWeight(5);
-    fill(1);
+    fill(0);
     
     for (int i = 0; i < caminoE.length; i++){
       if (caminoE[i] == null){
@@ -429,6 +481,38 @@ void drawShorterPathE (int n, int start){
       PVector a = caminoE[i].puntoinicial;
       PVector b = caminoE[i].puntofinal;
       line(a.x,a.y,b.x,b.y);
+    }
+  }
+  void displayCaminoB(){
+    pushStyle();
+    strokeWeight(2);
+    stroke(0, 0, 0);
+    strokeWeight(5);
+    fill(0);
+    
+    for (int i = 0; i < caminoB.length; i++){
+      if (caminoB[i] == null){
+        break;
+      }
+      PVector a = caminoB[i].puntoinicial;
+      PVector b = caminoB[i].puntofinal;
+      line(a.x,a.y,b.x,b.y);
+    }
+  }
+  void displayCamino(){
+   pushStyle();
+    strokeWeight(2);
+    stroke(0, 0, 0);
+    strokeWeight(5);
+    fill(0);
+
+    for (int i = 0; i < camino.length; i++) {
+      if (camino[i] == null) {
+        break;
+      }
+      PVector a = camino[i].puntoinicial;
+      PVector b = camino[i].puntofinal;
+      line(a.x, a.y, b.x, b.y);
     }
   }
 }

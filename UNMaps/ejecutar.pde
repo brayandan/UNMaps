@@ -15,9 +15,12 @@ void ejecutar(int a) {
 
   color clg=color(255, 126, 126); 
   PVector posg= new PVector(width/4, (height+img.height)/2+50);
-  PVector posge= new PVector(width*2/4, (height+img.height)/2+50);
+  PVector posge= new PVector((width*2)/4, (height+img.height)/2+50);
+  PVector posbo= new PVector((width*7)/8, (height+img.height)/2-30);//NUEVA POSICION DE BOTON(
+  PVector posbe= new PVector((width*4)/5, (height+img.height)/2+50);
   PVector dimeng= new PVector(210, 40);
   PVector dimenge= new PVector(400, 40);
+  PVector dimengb= new PVector(350,40);
   PVector preturned1= new PVector(width*1/2-80, (height-img.height)/2-30);
   PVector pauto= new PVector(width*1/2-20, (height-img.height)/2-30);
   PVector pcamina= new PVector(width*1/2+20, (height-img.height)/2-30);   
@@ -30,7 +33,9 @@ void ejecutar(int a) {
 
   Boton generate=new BotonRect(clg, posg, 6, 15, 28, dimeng, "Generar ruta", 0);
   Boton generateE=new BotonRect(clg, posge, 7, 15, 28, dimenge, "Generar ruta emblemática", 0);
-  Boton returned=new BotonCirc(color(41, 74, 255), preturned1, 0, 1);
+  Boton borrar=new BotonRect(clg, posbo, 9, 15, 28, dimeng, "Borrar", 0);//NUEVO BOTON
+  Boton generateb=new BotonRect(clg, posbe,8 , 15, 28, dimengb, "Generar ruta de belleza", 0);
+  Boton returned=new BotonCirc(color(41, 74, 255),preturned1, 0, 1);
   Boton camina=new BotonCirc(color(41, 74, 255), pauto, 2, 2);
   Boton auto=new BotonCirc(color(41, 74, 255), pcamina, 3, 3);
   
@@ -64,10 +69,26 @@ void ejecutar(int a) {
     generate.asignarValor();
     generateE.display();
     generateE.asignarValor();
-    mapa.display();    
-    if(botonb==true){
-      mapa.displayCaminoE();
-    }
+    borrar.display();//toca crear el botón xd
+    borrar.asignarValor();
+    generateb.display();
+    generateb.asignarValor();
+    mapa.display();  
+    if(botonbe==true){//para que el primer boton también se borre 
+   
+     mapa.displayCaminoB();
+   
+   }
+   if(botonb==true){
+   mapa.displayCaminoE();
+   }
+   if(boton==true){//para que el primer boton también se borre easy
+   
+     mapa.displayCamino();
+   
+   }
+   
+ 
     returned.display();
     returned.asignarValor();
     camina.display();
